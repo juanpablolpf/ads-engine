@@ -13,7 +13,7 @@ export function strategyEngine(produto: any): Estrategias {
     banners: []
   }
 
-  if (produto.material.toLowerCase().includes("inox")) {
+  if (produto.material?.toLowerCase().includes("inox")) {
     estrategias.beneficios.push(
       "Alta durabilidade",
       "Resistente ao calor"

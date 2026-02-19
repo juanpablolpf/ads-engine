@@ -24,7 +24,7 @@ DADOS DO PRODUTO:
 Nome: ${produto.nome}
 Categoria: ${produto.categoria}
 Material: ${produto.material}
-Diferenciais: ${produto.diferenciais.join(', ')}
+Diferenciais: ${produto.diferenciais?.join(', ') ?? "Não informado"}
 Preço: R$ ${produto.preco}
 Peso: ${produto.peso}kg
 
