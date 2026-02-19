@@ -12,6 +12,8 @@ async function run() {
     const prompt = buildPrompt(produto, estrategia)
 
     const anuncio = await generateAdWithHF(prompt)
+    console.log(`\n🔥 ===== PRODUTO ${produto.id} ===== 🔥\n`)
+    console.log(JSON.stringify(anuncio, null, 2))
 
     exportAd(produto.id, anuncio)
   }
