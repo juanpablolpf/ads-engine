@@ -29,7 +29,11 @@ export async function generateAdWithHF(prompt: string) {
       }
     );
 
-    return response.data.choices[0].message.content;
+    const rawText = response.data.choices[0].message.content;
+
+    const parsed = extractJSON(rawText);
+
+    return parsed;
 
   } catch (error: any) {
     console.error("Erro HuggingFace:", error.response?.data || error.message);
@@ -38,10 +42,28 @@ export async function generateAdWithHF(prompt: string) {
 }
 
 
+
 function extractJSON(text: string) {
-  const match = text.match(/\{[\s\S]*\}/);
+  const cleaned = text
+    .replace(/```json/g, "")
+    .replace(/```/g, "")
+    .replace(/\n/g, "")
+    .trim();
 
-  if (!match) throw new Error("JSON não encontrado");
+  const firstBrace = cleaned.indexOf("{");
+  const lastBrace = cleaned.lastIndexOf("}");
 
-  return JSON.parse(match[0]);
+  if (firstBrace === -1 || lastBrace === -1) {
+    throw new Error("JSON não encontrado");
+  }
+
+  const jsonString = cleaned.slice(firstBrace, lastBrace + 1);
+
+  try {
+    return JSON.parse(jsonString);
+  } catch (err) {
+    console.error("Erro ao fazer parse do JSON:", jsonString);
+    throw new Error("JSON inválido retornado pela IA");
+  }
 }
+

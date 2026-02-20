@@ -25,7 +25,18 @@ async function runCLI() {
       type: "input",
       name: "objetivo",
       message: "🎯 Objetivo do anúncio:"
+    },
+    {
+      type: "list",
+      name: "plataforma",
+      message: "🛒 Selecione a plataforma:",
+      choices: [
+        { name: "Mercado Livre", value: "ML" },
+        { name: "Shopee", value: "SHOPEE" },
+        { name: "Amazon", value: "AMAZON" }
+      ]
     }
+
   ])
 
   const produto = {
