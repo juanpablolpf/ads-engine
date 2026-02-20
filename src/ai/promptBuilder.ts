@@ -47,6 +47,10 @@ REGRAS CRÍTICAS (OBRIGATÓRIAS):
 
 Se qualquer regra for quebrada, a resposta será considerada inválida.
 
+Se Material, Peso ou Diferenciais estiverem como "Não informado",
+NÃO criar suposições técnicas.
+
+
 PRINCÍPIOS:
 - Priorizar benefícios antes de características.
 - Não inventar informações.
@@ -84,8 +88,14 @@ TÍTULO:
 - Sem exageros
 
 BULLETS:
+Cada bullet DEVE começar com verbo no infinitivo.
+Exemplo correto:
+- Garantir brasa uniforme
+- Proporcionar menos fumaça
+- Facilitar o preparo
+
+BULLETS:
 - No máximo 4
-- Começar com verbo no infinitivo
 - Até 15 palavras
 - Foco em benefício prático
 
