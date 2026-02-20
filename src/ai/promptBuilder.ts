@@ -38,6 +38,15 @@ Use frases curtas.
 Evite estrutura robótica.
 Evite parecer texto gerado por IA.
 
+REGRAS CRÍTICAS (OBRIGATÓRIAS):
+- Não inventar números.
+- Não inventar rendimento.
+- Não inventar uso profissional.
+- Não usar palavras como: perfeito, inesquecível, premium, incrível.
+- Se informação não foi fornecida, NÃO mencionar.
+
+Se qualquer regra for quebrada, a resposta será considerada inválida.
+
 PRINCÍPIOS:
 - Priorizar benefícios antes de características.
 - Não inventar informações.
