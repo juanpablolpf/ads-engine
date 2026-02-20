@@ -50,6 +50,13 @@ Se qualquer regra for quebrada, a resposta será considerada inválida.
 Se Material, Peso ou Diferenciais estiverem como "Não informado",
 NÃO criar suposições técnicas.
 
+DADOS BLOQUEADOS:
+Se a informação não estiver explicitamente fornecida,
+não mencionar.
+Não criar números.
+Não criar rendimento.
+Não criar uso profissional.
+
 
 PRINCÍPIOS:
 - Priorizar benefícios antes de características.

@@ -67,3 +67,30 @@ function extractJSON(text: string) {
   }
 }
 
+function validateAd(ad: any, produto: any) {
+  const errors: string[] = []
+
+  // título obrigatório
+  if (!ad.titulo) errors.push("Título vazio")
+
+  // preço não pode ser alterado
+  if (ad.descricao.includes("R$") && !ad.descricao.includes(`R$ ${produto.preco}`)) {
+    errors.push("Preço alterado na descrição")
+  }
+
+  // máximo 4 bullets
+  if (ad.bullets.length > 4) {
+    errors.push("Mais de 4 bullets")
+  }
+
+  // bullet deve começar com verbo no infinitivo
+  ad.bullets.forEach((b: string, i: number) => {
+    if (!b.match(/^[A-Za-zÀ-ú]+ar\b|er\b|ir\b/)) {
+      errors.push(`Bullet ${i + 1} não começa com verbo no infinitivo`)
+    }
+  })
+
+  return errors
+}
+
+
