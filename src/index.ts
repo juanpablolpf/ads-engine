@@ -11,7 +11,7 @@ async function run() {
     const estrategia = strategyEngine(produto)
     const prompt = buildPrompt(produto, estrategia)
 
-    const anuncio = await generateAdWithHF(prompt)
+    const anuncio = await generateAdWithHF(prompt, produto)
     console.log(`\n🔥 ===== PRODUTO ${produto.id} ===== 🔥\n`)
     console.log(JSON.stringify(anuncio, null, 2))
 
