@@ -51,7 +51,7 @@ async function runCLI() {
 
   console.log("🤖 Gerando anúncio com IA...\n")
 
-  const anuncio = await generateAdWithHF(prompt)
+  const anuncio = await generateAdWithHF(prompt, produto)
 
   console.log("\n🔥 ===== ANÚNCIO GERADO ===== 🔥\n")
   console.log(JSON.stringify(anuncio, null, 2))

@@ -6,7 +6,7 @@ dotenv.config();
 const HF_API_URL =
    "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2";
 
-export async function generateAdWithHF(prompt: string) {
+export async function generateAdWithHF(prompt: string, produto:any) {
   try {
     const response = await axios.post(
       "https://router.huggingface.co/v1/chat/completions",
@@ -32,6 +32,13 @@ export async function generateAdWithHF(prompt: string) {
     const rawText = response.data.choices[0].message.content;
 
     const parsed = extractJSON(rawText);
+
+     const errors = validateAd(parsed, produto);
+
+    if (errors.length > 0) {
+      console.log("❌ Erros encontrados:", errors);
+      throw new Error("Anúncio inválido gerado pela IA");
+    }
 
     return parsed;
 
@@ -85,7 +92,7 @@ function validateAd(ad: any, produto: any) {
 
   // bullet deve começar com verbo no infinitivo
   ad.bullets.forEach((b: string, i: number) => {
-    if (!b.match(/^[A-Za-zÀ-ú]+ar\b|er\b|ir\b/)) {
+    if (!b.match(/^[A-Za-zÀ-ú]+(ar|er|ir)\b/)) {
       errors.push(`Bullet ${i + 1} não começa com verbo no infinitivo`)
     }
   })
