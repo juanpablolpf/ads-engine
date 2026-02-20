@@ -1,48 +1,66 @@
 export function buildPrompt(produto: any, estrategia: any) {
-  const regrasPlataforma =
-    produto.plataforma === 'Shopee'
-      ? `
-- Título mais descritivo e atrativo
-- Pode usar emojis moderadamente
-- Linguagem comercial e envolvente
-`
-      : `
+
+  const regrasPorPlataforma: Record<string, string> = {
+    ML: `
 - Título com no máximo 60 caracteres
+- Palavra principal obrigatoriamente no início
 - Não usar emojis
 - Linguagem direta e objetiva
+- Foco em clareza e busca direta
+- SEO oculto com variações reais da palavra principal
+`,
+
+    SHOPEE: `
+- Título entre 80 e 120 caracteres
+- Pode repetir a palavra principal 2 vezes de forma natural
+- Pode usar até 2 emojis leves
+- Linguagem mais comercial e envolvente
+- SEO oculto com termos amplos e populares
+`,
+
+    AMAZON: `
+- Título entre 100 e 150 caracteres
+- Estrutura: Palavra principal + atributo + benefício
+- Não usar emojis
+- Linguagem mais técnica e descritiva
+- Destacar material, peso ou especificações
+- SEO oculto com termos mais específicos e técnicos
 `
+  }
+
+  const regrasPlataforma = regrasPorPlataforma[produto.plataforma] || ""
 
   return `
-Você é um copywriter especialista em anúncios para marketplaces brasileiros.
+Você é um copywriter especialista em marketplaces brasileiros.
 
-Escreva de forma simples, clara e fácil de entender.
+Escreva de forma natural, humana e comercial.
 Use frases curtas.
-Evite linguagem técnica desnecessária.
+Evite estrutura robótica.
 Evite parecer texto gerado por IA.
-Escreva como um vendedor experiente.
-Priorize BENEFÍCIOS antes de características técnicas.
 
-Não invente características que não foram informadas.
-Não use adjetivos exagerados como:
-"irresistível", "incrível", "excepcional", "perfeito".
-Se não houver informação técnica, mantenha descrição simples.
+PRINCÍPIOS:
+- Priorizar benefícios antes de características.
+- Não inventar informações.
+- Não exagerar com adjetivos.
+- Nunca alterar o preço informado.
+- Usar exatamente: R$ ${produto.preco}
 
-Nunca altere o preço informado.
-Use exatamente o valor: R$ ${produto.preco}
-
-
-Plataforma: ${produto.plataforma}
+PLATAFORMA SELECIONADA: ${produto.plataforma}
 
 REGRAS DA PLATAFORMA:
 ${regrasPlataforma}
+
+PALAVRA PRINCIPAL:
+Use obrigatoriamente "${produto.nome}" no título.
+Pode repetir na descrição de forma natural.
 
 DADOS DO PRODUTO:
 Nome: ${produto.nome}
 Categoria: ${produto.categoria}
 Material: ${produto.material ?? "Não informado"}
 Diferenciais: ${produto.diferenciais?.join(', ') ?? "Não informado"}
-Preço: R$ ${produto.preco}
 Peso: ${produto.peso ?? "Não informado"}kg
+Preço: R$ ${produto.preco}
 
 ESTRATÉGIAS ATIVAS:
 Benefícios: ${estrategia.beneficios.join(', ')}
@@ -52,29 +70,42 @@ Upsell: ${estrategia.upsell.join(', ')}
 REGRAS DE ESTRUTURA:
 
 TÍTULO:
-- Claro e direto
+- Claro e específico
+- Focado na busca
 - Sem exageros
-- Foco no que o produto resolve
 
 BULLETS:
 - No máximo 4
-- Começar com verbo
-- Até 15 palavras cada
-- Objetivos e fáceis de ler
+- Começar com verbo no infinitivo
+- Até 15 palavras
+- Foco em benefício prático
 
 DESCRIÇÃO:
 - Máximo 3 parágrafos curtos
-- Fácil leitura em celular
+- Fácil leitura no celular
 - Benefício primeiro, detalhe depois
-- Linguagem natural e comercial
+- Não começar com "Este produto"
+
+SEO_OCULTO:
+- Entre 6 e 10 palavras-chave
+- Separadas por vírgula
+- Não repetir frases idênticas
+
+UPSELL:
+- Só preencher se houver complemento real
+- Máximo 2 linhas
+- Natural, sem parecer forçado
 
 IMPORTANTE:
 - Retorne APENAS JSON válido
-- Não use markdown
-- Não escreva explicações
-- Não inclua texto fora do JSON
+- Não usar markdown
+- Não explicar nada
+- Não escrever texto fora do JSON
+- Nunca remover chaves
+- Se não aplicável, usar ""
 
-SAÍDA OBRIGATÓRIA EM JSON:
+SAÍDA OBRIGATÓRIA:
+
 {
   "titulo": "",
   "bullets": [],
