@@ -1,7 +1,7 @@
 import inquirer from "inquirer"
 import { strategyEngine } from "./rules/strategyEngine"
 import { buildPrompt } from "./ai/promptBuilder"
-import { generateAdWithHF } from "./ai/huggingFaceClient"
+import { generateAdWithHF } from "./ai/llmClient"
 import { exportAd } from "./output/exporter"
 
 async function runCLI() {

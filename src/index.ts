@@ -1,9 +1,8 @@
 import produtos from './data/produtos.json'
 import { strategyEngine } from './rules/strategyEngine'
 import { buildPrompt } from './ai/promptBuilder'
-import { generateAd } from './ai/openaiClient'
 import { exportAd } from './output/exporter'
-import { generateAdWithHF } from "./ai/huggingFaceClient";
+import { generateAdWithHF } from "./ai/llmClient";
 
 
 async function run() {
