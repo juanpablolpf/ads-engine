@@ -3,15 +3,15 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const HF_API_URL =
-   "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2";
+const HF_API_URL = "https://router.huggingface.co/v1/chat/completions";
 
-export async function generateAdWithHF(prompt: string, produto:any) {
+export async function generateAdWithHF(prompt: string, produto: any) {
   try {
+
     const response = await axios.post(
-      "https://router.huggingface.co/v1/chat/completions",
+      HF_API_URL,
       {
-        model: "mistralai/Mistral-7B-Instruct-v0.2",
+        model: "meta-llama/Llama-3.1-8B-Instruct",
         messages: [
           {
             role: "user",
@@ -33,7 +33,7 @@ export async function generateAdWithHF(prompt: string, produto:any) {
 
     const parsed = extractJSON(rawText);
 
-     const errors = validateAd(parsed, produto);
+    const errors = validateAd(parsed, produto);
 
     if (errors.length > 0) {
       console.log("❌ Erros encontrados:", errors);
@@ -48,20 +48,18 @@ export async function generateAdWithHF(prompt: string, produto:any) {
   }
 }
 
-
-
 function extractJSON(text: string) {
+
   const cleaned = text
     .replace(/```json/g, "")
     .replace(/```/g, "")
-    .replace(/\n/g, "")
     .trim();
 
   const firstBrace = cleaned.indexOf("{");
   const lastBrace = cleaned.lastIndexOf("}");
 
   if (firstBrace === -1 || lastBrace === -1) {
-    throw new Error("JSON não encontrado");
+    throw new Error("JSON não encontrado na resposta da IA");
   }
 
   const jsonString = cleaned.slice(firstBrace, lastBrace + 1);
@@ -69,35 +67,43 @@ function extractJSON(text: string) {
   try {
     return JSON.parse(jsonString);
   } catch (err) {
-    console.error("Erro ao fazer parse do JSON:", jsonString);
+    console.error("Erro ao fazer parse:", jsonString);
     throw new Error("JSON inválido retornado pela IA");
   }
 }
 
 function validateAd(ad: any, produto: any) {
-  const errors: string[] = []
 
-  // título obrigatório
-  if (!ad.titulo) errors.push("Título vazio")
+  const errors: string[] = [];
 
-  // preço não pode ser alterado
-  if (ad.descricao.includes("R$") && !ad.descricao.includes(`R$ ${produto.preco}`)) {
-    errors.push("Preço alterado na descrição")
+  if (!ad.titulo) {
+    errors.push("Título vazio");
   }
 
-  // máximo 4 bullets
+  if (!Array.isArray(ad.bullets)) {
+    errors.push("Bullets inválidos");
+    return errors;
+  }
+
   if (ad.bullets.length > 4) {
-    errors.push("Mais de 4 bullets")
+    errors.push("Mais de 4 bullets");
   }
 
-  // bullet deve começar com verbo no infinitivo
   ad.bullets.forEach((b: string, i: number) => {
-    if (!b.match(/^[A-Za-zÀ-ú]+(ar|er|ir)\b/)) {
-      errors.push(`Bullet ${i + 1} não começa com verbo no infinitivo`)
+
+    if (!b.match(/^[A-Za-zÀ-ú]+(ar|er|ir)\b/i)) {
+      errors.push(`Bullet ${i + 1} não começa com verbo no infinitivo`);
     }
-  })
 
-  return errors
+  });
+
+  if (
+    ad.descricao &&
+    ad.descricao.includes("R$") &&
+    !ad.descricao.includes(`R$ ${produto.preco}`)
+  ) {
+    errors.push("Preço alterado na descrição");
+  }
+
+  return errors;
 }
-
-
