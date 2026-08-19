@@ -1,0 +1,16 @@
+[
+    {
+        "id": "001",
+        "nome": "Grelha Inox para Churrasco Modelo Moeda",
+        "categoria": "Churrasco",
+        "material": "Aço Inox 430",
+        "diferenciais": [
+            "Modelo moeda",
+            "Fácil de limpar",
+            "Alta durabilidade"
+        ],
+        "preco": 129.90,
+        "peso": 1.8,
+        "plataforma": "Shopee"
+    }
+]

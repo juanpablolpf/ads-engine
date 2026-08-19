@@ -1,9 +1,9 @@
-import { Produto, Estrategias } from "../types";
-
-export function buildPrompt(produto: Produto, estrategia: Estrategias): string {
-
-  const regrasPorPlataforma: Record<string, string> = {
-    ML: `
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.buildPrompt = buildPrompt;
+function buildPrompt(produto, estrategia) {
+    const regrasPorPlataforma = {
+        ML: `
 - Título com no máximo 60 caracteres
 - Palavra principal obrigatoriamente no início
 - Não usar emojis
@@ -11,16 +11,14 @@ export function buildPrompt(produto: Produto, estrategia: Estrategias): string {
 - Foco em clareza e busca direta
 - SEO oculto com variações reais da palavra principal
 `,
-
-    SHOPEE: `
+        SHOPEE: `
 - Título entre 80 e 120 caracteres
 - Pode repetir a palavra principal 2 vezes de forma natural
 - Pode usar até 2 emojis leves
 - Linguagem mais comercial e envolvente
 - SEO oculto com termos amplos e populares
 `,
-
-    AMAZON: `
+        AMAZON: `
 - Título entre 100 e 150 caracteres
 - Estrutura: Palavra principal + atributo + benefício
 - Não usar emojis
@@ -28,14 +26,11 @@ export function buildPrompt(produto: Produto, estrategia: Estrategias): string {
 - Destacar material, peso ou especificações
 - SEO oculto com termos mais específicos e técnicos
 `
-  };
-
-  const plataformaKey = (produto.plataforma || "").toUpperCase();
-  const regrasPlataforma = regrasPorPlataforma[plataformaKey] || "";
-
-  const precoFormatado = typeof produto.preco === "number" ? produto.preco.toFixed(2) : produto.preco;
-
-  return `
+    };
+    const plataformaKey = (produto.plataforma || "").toUpperCase();
+    const regrasPlataforma = regrasPorPlataforma[plataformaKey] || "";
+    const precoFormatado = typeof produto.preco === "number" ? produto.preco.toFixed(2) : produto.preco;
+    return `
 Você é um copywriter especialista em marketplaces brasileiros.
 
 Escreva de forma natural, humana e comercial.
@@ -144,4 +139,3 @@ SAÍDA OBRIGATÓRIA:
 }
 `;
 }
-
