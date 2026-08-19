@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Navbar } from "./components/Navbar";
 import { ProductForm } from "./components/ProductForm";
 import { MarketplaceMockup } from "./components/MarketplaceMockup";
@@ -8,13 +8,12 @@ import {
   fetchHealth,
   fetchTemplates,
   fetchHistory,
-  fetchStrategyPreview,
+  calculateLocalStrategy,
   generateAd
 } from "./services/api";
 import type {
   ProdutoInput,
   AnuncioResult,
-  EstrategiasResult,
   HistoryItem
 } from "./services/api";
 import {
@@ -24,7 +23,6 @@ import {
   ShieldCheck,
   AlertTriangle
 } from "lucide-react";
-
 
 export function App() {
   const [apiStatus, setApiStatus] = useState<"online" | "offline" | "checking">("checking");
@@ -44,8 +42,11 @@ export function App() {
     objetivo: "Destacar durabilidade e facilidade de limpeza"
   });
 
-  // Strategy & Ad Results
-  const [estrategiaPreview, setEstrategiaPreview] = useState<EstrategiasResult | null>(null);
+  // Strategy is computed synchronously in 0ms without network overhead!
+  const estrategiaPreview = useMemo(() => {
+    return calculateLocalStrategy(formData);
+  }, [formData]);
+
   const [currentAnuncio, setCurrentAnuncio] = useState<AnuncioResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -71,7 +72,6 @@ export function App() {
         const hist = await fetchHistory();
         setHistory(hist);
         if (hist.length > 0) {
-          // Pre-load the latest ad generated
           setCurrentAnuncio(hist[0].conteudo);
         }
       } catch (err) {
@@ -81,23 +81,6 @@ export function App() {
     init();
   }, []);
 
-  // Compute strategy preview when formData changes (debounced)
-  useEffect(() => {
-    const timer = setTimeout(async () => {
-      if (formData.nome && formData.preco) {
-        try {
-          const est = await fetchStrategyPreview(formData);
-          setEstrategiaPreview(est);
-        } catch {
-          // silent fallback
-        }
-      }
-    }, 250);
-
-    return () => clearTimeout(timer);
-  }, [formData]);
-
-  // Handle Ad Generation
   const handleGenerate = async () => {
     setIsLoading(true);
     setErrorMsg(null);
